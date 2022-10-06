@@ -1,0 +1,111 @@
+openapi: 3.0.0
+servers:
+  - description: A local server endpoint
+    url: http://localhost:8080/cg/actuator/switch
+info:
+  version: "1.0.0"
+  title: cg-switch-remote-control-api
+  description: |
+    Switch Remote Control API. Allows remote control switch,
+    consisting of ESP8266 and SRD-05VDC-SL-C relay.
+paths:
+  "/{deviceId}/state":
+    get:
+      tags:
+        - device
+          ESP8266
+          SRD-05VDC-SL-C
+      description: Returns device state
+      operationId: getDeviceState
+      parameters:
+        - in: path
+          name: deviceId
+          description: Device unique identifier
+          schema:
+            type: integer
+            minLength: 4
+            maxLength: 4
+          required: true
+      responses:
+        "200":
+          description: The device state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceStateType"
+        "500":
+          description: Internal device error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - device
+          ESP8266
+          SRD-05VDC-SL-C
+      operationId: setDeviceSet
+      responses:
+        "200":
+          description: Successfully set device state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceStateType"
+        "400":
+          description: Request message validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal device error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceStateType"
+
+components:
+  schemas:
+    DeviceStateType:
+      type: object
+      properties:
+        plug1:
+          description: SRD-05VDC-SL-C first plag state
+          type: integer
+          minimum: 0
+          maximum: 1
+          example: 0
+        plug2:
+          description: SRD-05VDC-SL-C second plag state
+          type: integer
+          minimum: 0
+          maximum: 1
+          example: 1
+        plug3:
+          description: SRD-05VDC-SL-C third plag state
+          type: integer
+          minimum: 0
+          maximum: 1
+          example: 1
+        plug4:
+          description: SRD-05VDC-SL-C fourth plag state
+          type: integer
+          minimum: 0
+          maximum: 1
+          example: 0
+    Error:
+      type: object
+      properties:
+        errorCode:
+          description: Unique error code
+          type: string
+          maxLength: 4
+        errorMsg:
+          description: Detailed error description
+          type: string
