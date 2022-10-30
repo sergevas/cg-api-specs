@@ -16,7 +16,7 @@ paths:
           ESP8266
           SRD-05VDC-SL-C
       description: Update device status
-      operationId: updateDeviceState
+      operationId: updateDeviceStatus
       parameters:
         - in: path
           name: deviceId
@@ -33,10 +33,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DeviceIdType"
+                $ref: "#/components/schemas/DeviceCurrentStateType"
               examples:
                 deviceStateTypeExample:
-                  $ref: "#/components/examples/DeviceIdTypeExample"
+                  $ref: "#/components/examples/DeviceCurrentStateTypeExample"
         "500":
           description: Internal device error
           content:
@@ -105,7 +105,24 @@ components:
       type: string
       description: Device unique identifier
       maxLength: 4
-      example: 0001
+      example: "0001"
+    DeviceStateType:
+      type: string
+      enum:
+        - active
+        - sleeping
+        - stopped
+        - error
+      description: Device possible states
+      example: active
+    DeviceCurrentStateType:
+      type: object
+      description: Current device state
+      properties:
+        deviceId:
+          $ref: "#/components/schemas/DeviceIdType"
+        deviceState:
+          $ref: "#/components/schemas/DeviceStateType"
     DeviceRegistrationType:
       type: object
       description: The device registration data
@@ -118,7 +135,7 @@ components:
           type: string
           maxLength: 4
           description: Device unique identifier
-          example: 0001
+          example: "0001"
         deviceTags:
           type: array
           description: Device description tags
@@ -148,24 +165,28 @@ components:
           type: string
   examples:
     DeviceIdTypeExample:
-      value: 0001
+      value: "0001"
+    DeviceCurrentStateTypeExample:
+      value:
+        deviceId: "0001"
+        deviceState: active
     DeviceRegistrationTypeExample:
       value:
         deviceType: switch
-        deviceId: 0001
+        deviceId: "0001"
         deviceTags:
           - SRD-05VDC-SL-C
         deviceUri: http://192.168.1.84/cg/actuator/switch/0001
         statusUpdatePeriod: 600000
     ErrorValidationExample:
       value:
-        errorCode: 0001
+        errorCode: "0001"
         errorMsg: InvalidInput
     ErrorInternalExample:
       value:
-        errorCode: 0002
+        errorCode: "0002"
         errorMsg: Internal gateway error
     ErrorUnableToRegisterExample:
       value:
-        errorCode: 0003
+        errorCode: "0003"
         errorMsg: Internal gateway error
