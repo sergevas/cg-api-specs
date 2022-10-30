@@ -104,7 +104,7 @@ components:
       type: string
       description: Device unique identifier
       maxLength: 4
-      example: 0001
+      example: "0001"
     PlugType:
       type: integer
       description: SRD-05VDC-SL-C single plug state
@@ -135,7 +135,7 @@ components:
           type: string
           maxLength: 4
           description: Device unique identifier
-          example: 0001
+          example: "0001"
         deviceTags:
           type: array
           description: Device description tags
@@ -163,7 +163,7 @@ components:
           type: string
   examples:
     DeviceIdTypeExample:
-      value: 0001
+      value: "0001"
     DeviceStateUpdateTypeExample:
       value:
         plug1: 1
@@ -173,7 +173,7 @@ components:
     DeviceStateTypeExample:
       value:
         deviceType: switch
-        deviceId: 0001
+        deviceId: "0001"
         deviceTags:
           - SRD-05VDC-SL-C
         plug1: 1
@@ -182,9 +182,9 @@ components:
         plug4: 0
     ErrorValidationExample:
       value:
-        errorCode: 0001
+        errorCode: "0001"
         errorMsg: InvalidInput
     ErrorInternalExample:
       value:
-        errorCode: 0002
+        errorCode: "0002"
         errorMsg: Internal device error
