@@ -116,7 +116,7 @@ paths:
               $ref: "#/components/examples/DeviceIdTypeExample"
           required: true
         - in: path
-          name: deviceResurce
+          name: deviceResource
           description: Device resource without leading '/'
           schema:
             type: string
@@ -163,7 +163,7 @@ paths:
               $ref: "#/components/examples/DeviceIdTypeExample"
           required: true
         - in: path
-          name: deviceResurce
+          name: deviceResource
           description: Device resource without leading '/'
           schema:
             type: string
