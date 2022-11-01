@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers:
   - description: A dev server endpoint
-    url: http://192.168.1.84/cg/gateway/registration
+    url: http://192.168.1.84/cg/gateway
 info:
   version: "1.0.0"
   title: cg-gateway-registration-api
@@ -83,7 +83,7 @@ paths:
                 errorValidationExample:
                   $ref: "#/components/examples/ErrorValidationExample"
         "500":
-          description: Internal device error
+          description: Internal gateway error
           content:
             application/json:
               schema:
@@ -99,6 +99,109 @@ paths:
             examples:
               deviceStateUpdateTypeExample:
                 $ref: "#/components/examples/DeviceRegistrationTypeExample"
+  "/{deviceId}/{deviceResource}":
+    get:
+      tags:
+        - device
+      description: Calls GET on a device resource
+      operationId: callGetOnDeviceResource
+      parameters:
+        - in: path
+          name: deviceId
+          description: Device unique identifier
+          schema:
+            $ref: "#/components/schemas/DeviceIdType"
+          examples:
+            deviceIdTypeExample:
+              $ref: "#/components/examples/DeviceIdTypeExample"
+          required: true
+        - in: path
+          name: deviceResurce
+          description: Device resource without leading '/'
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Device resource response contetnt
+          content:
+            "*/*":
+              schema:
+                type: string
+                format: birary
+        "500":
+          description: Internal gateway error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorInternalExample:
+                  $ref: "#/components/examples/ErrorInternalExample"
+        "503":
+          description: Device resource call error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorWithDeviceErrorInfo"
+              examples:
+                errorInternalExample:
+                  $ref: "#/components/examples/ErrorWithDeviceErrorInfoExample"
+    post:
+      tags:
+        - device
+      description: Calls POST on a device resource
+      operationId: callPostOnDeviceResource
+      parameters:
+        - in: path
+          name: deviceId
+          description: Device unique identifier
+          schema:
+            $ref: "#/components/schemas/DeviceIdType"
+          examples:
+            deviceIdTypeExample:
+              $ref: "#/components/examples/DeviceIdTypeExample"
+          required: true
+        - in: path
+          name: deviceResurce
+          description: Device resource without leading '/'
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successfully called POST on a device resource
+          content:
+            "*/*":
+              schema:
+                type: string
+                format: binary
+                description: Device resource request message body
+        "500":
+          description: Internal device error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorInternalExample:
+                  $ref: "#/components/examples/ErrorInternalExample"
+        "503":
+          description: Device resource call error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorWithDeviceErrorInfo"
+              examples:
+                errorInternalExample:
+                  $ref: "#/components/examples/ErrorWithDeviceErrorInfoExample"
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              format: binary
+              description: Device resource response message body
 components:
   schemas:
     DeviceIdType:
@@ -155,6 +258,7 @@ components:
           example: 600000
     Error:
       type: object
+      description: Gateway common error type
       properties:
         errorCode:
           description: Unique error code
@@ -162,6 +266,27 @@ components:
           maxLength: 4
         errorMsg:
           description: Detailed error description
+          type: string
+    ErrorWithDeviceErrorInfo:
+      type: object
+      description: Gateway error type with device original error description
+      properties:
+        errorCode:
+          description: Unique error code
+          type: string
+          maxLength: 4
+        errorMsg:
+          description: Detailed error description
+          type: string
+        deviceResponseHttpCode:
+          description: Device response original HTTP code
+          type: integer
+        deviceErrorCode:
+          description: Device original error code
+          type: string
+          maxLength: 4
+        deviceErrorMsg:
+          description: Device original error description
           type: string
   examples:
     DeviceIdTypeExample:
@@ -178,6 +303,11 @@ components:
           - SRD-05VDC-SL-C
         deviceUri: http://192.168.1.84/cg/actuator/switch/0001
         statusUpdatePeriod: 600000
+    DeviceResourceExample:
+      value: "state"
+      description: |
+        state - is a name of the device resource where complete URL
+        can look as http://192.168.1.84/cg/actuator/switch/0001/state
     ErrorValidationExample:
       value:
         errorCode: "0001"
@@ -189,4 +319,11 @@ components:
     ErrorUnableToRegisterExample:
       value:
         errorCode: "0003"
-        errorMsg: Internal gateway error
+        errorMsg: Device registration error
+    ErrorWithDeviceErrorInfoExample:
+      value:
+        errorCode: "0004"
+        errorMsg: Unable to call device resource
+        deviceResponseHttpCode: 500
+        deviceErrorCode: "0001"
+        deviceErrorMsg: "Internal device error"
