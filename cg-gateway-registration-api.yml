@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers:
   - description: A dev server endpoint
-    url: http://192.168.1.84/cg/gateway
+    url: http://192.168.1.84/cg/gateway/registry
 info:
   version: "1.0.0"
   title: cg-gateway-registration-api
@@ -9,7 +9,7 @@ info:
     Device registration gateway API. Allows a remote device to register itself
     with the gateway or update its status.
 paths:
-  "/{deviceId}/status":
+  "/status/{deviceId}":
     put:
       tags:
         - device
@@ -46,13 +46,58 @@ paths:
               examples:
                 errorInternalExample:
                   $ref: "#/components/examples/ErrorInternalExample"
-  "/{deviceId}/register":
+  "/register":
     post:
       tags:
         - device
           ESP8266
           SRD-05VDC-SL-C
-      operationId: setDeviceRegistrationInfo
+      description: Register a new device
+      operationId: registerNewDevice
+      responses:
+        "200":
+          description: Device is successfully registered on the gateway
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceRegistrationType"
+              examples:
+                deviceStateTypeExample:
+                  $ref: "#/components/examples/DeviceRegistrationTypeExample"
+        "400":
+          description: Request message validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorValidationExample:
+                  $ref: "#/components/examples/ErrorValidationExample"
+        "500":
+          description: Internal gateway error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorInternalExample:
+                  $ref: "#/components/examples/ErrorInternalExample"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceRegistrationType"
+            examples:
+              deviceStateUpdateTypeExample:
+                $ref: "#/components/examples/DeviceRegistrationTypeExample"
+  "/register/{device}":
+    put:
+      tags:
+        - device
+          ESP8266
+          SRD-05VDC-SL-C
+      description: Update a registered device registration info
+      operationId: reregisterExistingDevice
       parameters:
         - in: path
           name: deviceId
@@ -116,14 +161,14 @@ paths:
               $ref: "#/components/examples/DeviceIdTypeExample"
           required: true
         - in: path
-          name: deviceResurce
+          name: deviceResource
           description: Device resource without leading '/'
           schema:
             type: string
           required: true
       responses:
         "200":
-          description: Device resource response contetnt
+          description: Device resource response content
           content:
             "*/*":
               schema:
@@ -176,7 +221,7 @@ paths:
               schema:
                 type: string
                 format: binary
-                description: Device resource request message body
+                description: Device resource response message body
         "500":
           description: Internal device error
           content:
@@ -201,7 +246,7 @@ paths:
             schema:
               type: string
               format: binary
-              description: Device resource response message body
+              description: Device resource request message body
 components:
   schemas:
     DeviceIdType:
@@ -217,7 +262,7 @@ components:
         - stopped
         - error
       description: Device possible states
-      example: active
+      example: "active"
     DeviceCurrentStateType:
       type: object
       description: Current device state
@@ -233,7 +278,7 @@ components:
         deviceType:
           type: string
           description: Device type description
-          example: switch
+          example: "switch"
         deviceId:
           type: string
           maxLength: 4
@@ -245,12 +290,12 @@ components:
           items:
             type: string
             description: Single device description tag
-            example: SRD-05VDC-SL-C
+            example: "SRD-05VDC-SL-C"
         deviceUri:
           type: string
           format: uri
           description: Device base URI
-          example: http://192.168.1.84/cg/actuator/switch/0001
+          example: "http://192.168.1.84/cg/actuator/switch/0001"
         statusUpdatePeriod:
           type: integer
           minimum: 0
@@ -294,14 +339,14 @@ components:
     DeviceCurrentStateTypeExample:
       value:
         deviceId: "0001"
-        deviceState: active
+        deviceState: "active"
     DeviceRegistrationTypeExample:
       value:
-        deviceType: switch
+        deviceType: "switch"
         deviceId: "0001"
         deviceTags:
-          - SRD-05VDC-SL-C
-        deviceUri: http://192.168.1.84/cg/actuator/switch/0001
+          - "SRD-05VDC-SL-C"
+        deviceUri: "http://192.168.1.84/cg/actuator/switch/0001"
         statusUpdatePeriod: 600000
     DeviceResourceExample:
       value: "state"
@@ -311,19 +356,19 @@ components:
     ErrorValidationExample:
       value:
         errorCode: "0001"
-        errorMsg: InvalidInput
+        errorMsg: "InvalidInput"
     ErrorInternalExample:
       value:
         errorCode: "0002"
-        errorMsg: Internal gateway error
+        errorMsg: "Internal gateway error"
     ErrorUnableToRegisterExample:
       value:
         errorCode: "0003"
-        errorMsg: Device registration error
+        errorMsg: "Device registration error"
     ErrorWithDeviceErrorInfoExample:
       value:
         errorCode: "0004"
-        errorMsg: Unable to call device resource
+        errorMsg: "Unable to call device resource"
         deviceResponseHttpCode: 500
         deviceErrorCode: "0001"
         deviceErrorMsg: "Internal device error"
