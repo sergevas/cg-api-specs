@@ -9,12 +9,47 @@ info:
     Device registration gateway API. Allows a remote device to register itself
     with the gateway or update its status.
 paths:
-  "/status/{deviceId}":
+  "/devices/status/{deviceId}":
+    get:
+      tags:
+        - registry
+          device
+          status
+      description: Returns registered devices status info
+      operationId: callGetDeviceStatus
+      responses:
+        "200":
+          description: Registered device status info
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/DeviceCurrentStateType"
+              examples:
+                deviceCurrentStateTypeExample:
+                  $ref: "#/components/examples/DeviceCurrentStateTypeExample"
+        "400":
+          description: Request message validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorValidationExample:
+                  $ref: "#/components/examples/ErrorValidationExample"
+        "500":
+          description: Internal gateway error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorInternalExample:
+                  $ref: "#/components/examples/ErrorInternalExample"
     put:
       tags:
-        - device
-          ESP8266
-          SRD-05VDC-SL-C
+        - registry
+          device
+          status
       description: Update device status
       operationId: updateDeviceStatus
       parameters:
@@ -35,7 +70,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/DeviceCurrentStateType"
               examples:
-                deviceStateTypeExample:
+                deviceCurrentStateTypeExample:
                   $ref: "#/components/examples/DeviceCurrentStateTypeExample"
         "500":
           description: Internal device error
@@ -46,12 +81,48 @@ paths:
               examples:
                 errorInternalExample:
                   $ref: "#/components/examples/ErrorInternalExample"
-  "/register":
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceCurrentStateType"
+            examples:
+              deviceCurrentStateTypeExample:
+                $ref: "#/components/examples/DeviceCurrentStateTypeExample"
+  "/devices":
+    get:
+      tags:
+        - registry
+          device
+          registration
+      description: Returns the list of registered devices
+      operationId: callGetOnDeviceList
+      responses:
+        "200":
+          description: The list of registered devices is successfully returned
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceRegistrationType"
+              examples:
+                deviceRegistrationTypesExample:
+                  $ref: "#/components/examples/DeviceRegistrationTypesExample"
+        "500":
+          description: Internal gateway error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorInternalExample:
+                  $ref: "#/components/examples/ErrorInternalExample"
     post:
       tags:
-        - device
-          ESP8266
-          SRD-05VDC-SL-C
+        - registry
+          device
+          registration
       description: Register a new device
       operationId: registerNewDevice
       responses:
@@ -62,7 +133,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/DeviceRegistrationType"
               examples:
-                deviceStateTypeExample:
+                deviceRegistrationTypeExample:
                   $ref: "#/components/examples/DeviceRegistrationTypeExample"
         "400":
           description: Request message validation error
@@ -88,16 +159,16 @@ paths:
             schema:
               $ref: "#/components/schemas/DeviceRegistrationType"
             examples:
-              deviceStateUpdateTypeExample:
+              deviceRegistrationTypeExample:
                 $ref: "#/components/examples/DeviceRegistrationTypeExample"
-  "/register/{device}":
-    put:
+  "/devices/{deviceId}":
+    get:
       tags:
-        - device
-          ESP8266
-          SRD-05VDC-SL-C
-      description: Update a registered device registration info
-      operationId: reregisterExistingDevice
+        - registry
+          device
+          registration
+      description: Returns a registered device registration info
+      operationId: callGetOnDevice
       parameters:
         - in: path
           name: deviceId
@@ -110,13 +181,113 @@ paths:
           required: true
       responses:
         "200":
-          description: Device is successfully registered on the gateway
+          description: A registered devices registration info
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceRegistrationType"
+              examples:
+                deviceRegistrationTypeExample:
+                  $ref: "#/components/examples/DeviceRegistrationTypeExample"
+        "400":
+          description: Request message validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorValidationExample:
+                  $ref: "#/components/examples/ErrorValidationExample"
+        "500":
+          description: Internal gateway error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorInternalExample:
+                  $ref: "#/components/examples/ErrorInternalExample"
+    put:
+      tags:
+        - registry
+          device
+          registration
+      description: Update a registered device registration info
+      operationId: updateExistingDeviceRegistrationInfo
+      parameters:
+        - in: path
+          name: deviceId
+          description: Device unique identifier
+          schema:
+            $ref: "#/components/schemas/DeviceIdType"
+          examples:
+            deviceIdTypeExample:
+              $ref: "#/components/examples/DeviceIdTypeExample"
+          required: true
+      responses:
+        "200":
+          description: Device info is successfully updated in the gateway configuration
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeviceRegistrationType"
               examples:
-                deviceStateTypeExample:
+                deviceRegistrationTypeExample:
+                  $ref: "#/components/examples/DeviceRegistrationTypeExample"
+        "400":
+          description: Request message validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorValidationExample:
+                  $ref: "#/components/examples/ErrorValidationExample"
+        "500":
+          description: Internal gateway error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                errorInternalExample:
+                  $ref: "#/components/examples/ErrorInternalExample"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceRegistrationType"
+            examples:
+              deviceRegistrationTypeExample:
+                $ref: "#/components/examples/DeviceRegistrationTypeExample"
+    delete:
+      tags:
+        - registry
+          device
+          registration
+      description: Delete a registered device
+      operationId: deleteDevice
+      parameters:
+        - in: path
+          name: deviceId
+          description: Device unique identifier
+          schema:
+            $ref: "#/components/schemas/DeviceIdType"
+          examples:
+            deviceIdTypeExample:
+              $ref: "#/components/examples/DeviceIdTypeExample"
+          required: true
+      responses:
+        "200":
+          description: Device info is successfully deleted from the gateway configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceRegistrationType"
+              examples:
+                deviceRegistrationTypeExample:
                   $ref: "#/components/examples/DeviceRegistrationTypeExample"
         "400":
           description: Request message validation error
@@ -144,10 +315,12 @@ paths:
             examples:
               deviceStateUpdateTypeExample:
                 $ref: "#/components/examples/DeviceRegistrationTypeExample"
-  "/{deviceId}/{deviceResource}":
+
+  "/devices/{deviceId}/{deviceResource}":
     get:
       tags:
-        - device
+        - gateway
+          device resources
       description: Calls GET on a device resource
       operationId: callGetOnDeviceResource
       parameters:
@@ -173,7 +346,7 @@ paths:
             "*/*":
               schema:
                 type: string
-                format: birary
+                format: binary
         "500":
           description: Internal gateway error
           content:
@@ -194,7 +367,8 @@ paths:
                   $ref: "#/components/examples/ErrorWithDeviceErrorInfoExample"
     post:
       tags:
-        - device
+        - gateway
+          device resources
       description: Calls POST on a device resource
       operationId: callPostOnDeviceResource
       parameters:
@@ -348,6 +522,20 @@ components:
           - "SRD-05VDC-SL-C"
         deviceUri: "http://192.168.1.84/cg/actuator/switch/0001"
         statusUpdatePeriod: 600000
+    DeviceRegistrationTypesExample:
+      value:
+        - deviceType: "switch"
+          deviceId: "0001"
+          deviceTags:
+            - "SRD-05VDC-SL-C"
+          deviceUri: "http://192.168.1.84/cg/actuator/switch/0001"
+          statusUpdatePeriod: 600000
+        - deviceType: "switch"
+          deviceId: "0002"
+          deviceTags:
+            - "SRD-05VDC-SL-C"
+          deviceUri: "http://192.168.1.84/cg/actuator/switch/0002"
+          statusUpdatePeriod: 10000
     DeviceResourceExample:
       value: "state"
       description: |
