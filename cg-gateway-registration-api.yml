@@ -10,6 +10,16 @@ info:
     with the gateway or update its status.
 paths:
   "/devices/status/{deviceId}":
+    parameters:
+      - in: path
+        name: deviceId
+        description: Device unique identifier
+        schema:
+          $ref: "#/components/schemas/DeviceIdType"
+        examples:
+          deviceIdTypeExample:
+            $ref: "#/components/examples/DeviceIdTypeExample"
+        required: true
     get:
       tags:
         - registry
@@ -52,16 +62,6 @@ paths:
           status
       description: Update device status
       operationId: updateDeviceStatus
-      parameters:
-        - in: path
-          name: deviceId
-          description: Device unique identifier
-          schema:
-            $ref: "#/components/schemas/DeviceIdType"
-          examples:
-            deviceIdTypeExample:
-              $ref: "#/components/examples/DeviceIdTypeExample"
-          required: true
       responses:
         "200":
           description: Device status updated successfully
@@ -307,38 +307,29 @@ paths:
               examples:
                 errorInternalExample:
                   $ref: "#/components/examples/ErrorInternalExample"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DeviceRegistrationType"
-            examples:
-              deviceStateUpdateTypeExample:
-                $ref: "#/components/examples/DeviceRegistrationTypeExample"
-
   "/devices/{deviceId}/{deviceResource}":
+    parameters:
+      - in: path
+        name: deviceId
+        description: Device unique identifier
+        schema:
+          $ref: "#/components/schemas/DeviceIdType"
+        examples:
+          deviceIdTypeExample:
+            $ref: "#/components/examples/DeviceIdTypeExample"
+        required: true
+      - in: path
+        name: deviceResource
+        description: Device resource without leading '/'
+        schema:
+          type: string
+        required: true
     get:
       tags:
         - gateway
           device resources
       description: Calls GET on a device resource
       operationId: callGetOnDeviceResource
-      parameters:
-        - in: path
-          name: deviceId
-          description: Device unique identifier
-          schema:
-            $ref: "#/components/schemas/DeviceIdType"
-          examples:
-            deviceIdTypeExample:
-              $ref: "#/components/examples/DeviceIdTypeExample"
-          required: true
-        - in: path
-          name: deviceResource
-          description: Device resource without leading '/'
-          schema:
-            type: string
-          required: true
       responses:
         "200":
           description: Device resource response content
@@ -363,7 +354,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorWithDeviceErrorInfo"
               examples:
-                errorInternalExample:
+                errorWithDeviceErrorInfoExampleExample:
                   $ref: "#/components/examples/ErrorWithDeviceErrorInfoExample"
     post:
       tags:
@@ -371,22 +362,6 @@ paths:
           device resources
       description: Calls POST on a device resource
       operationId: callPostOnDeviceResource
-      parameters:
-        - in: path
-          name: deviceId
-          description: Device unique identifier
-          schema:
-            $ref: "#/components/schemas/DeviceIdType"
-          examples:
-            deviceIdTypeExample:
-              $ref: "#/components/examples/DeviceIdTypeExample"
-          required: true
-        - in: path
-          name: deviceResource
-          description: Device resource without leading '/'
-          schema:
-            type: string
-          required: true
       responses:
         "200":
           description: Successfully called POST on a device resource
@@ -412,7 +387,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorWithDeviceErrorInfo"
               examples:
-                errorInternalExample:
+                errorWithDeviceErrorInfoExample:
                   $ref: "#/components/examples/ErrorWithDeviceErrorInfoExample"
       requestBody:
         content:
