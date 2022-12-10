@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers:
   - description: A dev server endpoint
-    url: http://192.168.1.84/cg/gateway/registry
+    url: http://192.168.1.84/cg/gateway
 info:
   version: "1.0.0"
   title: cg-gateway-registration-api
@@ -9,7 +9,7 @@ info:
     Device registration gateway API. Allows a remote device to register itself
     with the gateway or update its status.
 paths:
-  "/devices/status/{deviceId}":
+  "/registry/devices/status/{deviceId}":
     parameters:
       - in: path
         name: deviceId
@@ -89,7 +89,7 @@ paths:
             examples:
               deviceCurrentStateTypeExample:
                 $ref: "#/components/examples/DeviceCurrentStateTypeExample"
-  "/devices":
+  "/registry/devices":
     get:
       tags:
         - registry
@@ -161,7 +161,7 @@ paths:
             examples:
               deviceRegistrationTypeExample:
                 $ref: "#/components/examples/DeviceRegistrationTypeExample"
-  "/devices/{deviceId}":
+  "/registry/devices/{deviceId}":
     get:
       tags:
         - registry
@@ -307,7 +307,7 @@ paths:
               examples:
                 errorInternalExample:
                   $ref: "#/components/examples/ErrorInternalExample"
-  "/devices/{deviceId}/{deviceResource}":
+  "/proxy/devices/{deviceId}/{deviceResource}":
     parameters:
       - in: path
         name: deviceId
