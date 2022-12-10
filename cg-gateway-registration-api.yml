@@ -406,10 +406,10 @@ components:
     DeviceStateType:
       type: string
       enum:
-        - active
-        - sleeping
-        - stopped
-        - error
+        - ACTIVE
+        - SLEEPING
+        - STOPPED
+        - ERROR
       description: Device possible states
       example: "active"
     DeviceCurrentStateType:
