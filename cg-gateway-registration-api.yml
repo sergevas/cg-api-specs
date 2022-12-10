@@ -26,7 +26,7 @@ paths:
           device
           status
       description: Returns registered devices status info
-      operationId: callGetDeviceStatus
+      operationId: getDeviceStatus
       responses:
         "200":
           description: Registered device status info
@@ -96,7 +96,7 @@ paths:
           device
           registration
       description: Returns the list of registered devices
-      operationId: callGetOnDeviceList
+      operationId: getRegisteredDevices
       responses:
         "200":
           description: The list of registered devices is successfully returned
@@ -124,7 +124,7 @@ paths:
           device
           registration
       description: Register a new device
-      operationId: registerNewDevice
+      operationId: registerDevice
       responses:
         "200":
           description: Device is successfully registered on the gateway
@@ -168,7 +168,7 @@ paths:
           device
           registration
       description: Returns a registered device registration info
-      operationId: callGetOnDevice
+      operationId: getRegisteredDeviceInfo
       parameters:
         - in: path
           name: deviceId
@@ -215,7 +215,7 @@ paths:
           device
           registration
       description: Update a registered device registration info
-      operationId: updateExistingDeviceRegistrationInfo
+      operationId: updateRegisteredDeviceInfo
       parameters:
         - in: path
           name: deviceId
@@ -268,7 +268,7 @@ paths:
           device
           registration
       description: Delete a registered device
-      operationId: deleteDevice
+      operationId: deleteRegisteredDevice
       parameters:
         - in: path
           name: deviceId
@@ -329,12 +329,12 @@ paths:
         - gateway
           device resources
       description: Calls GET on a device resource
-      operationId: callGetOnDeviceResource
+      operationId: getOnDeviceResource
       responses:
         "200":
           description: Device resource response content
           content:
-            "*/*":
+            application/octet-stream":
               schema:
                 type: string
                 format: binary
@@ -361,12 +361,12 @@ paths:
         - gateway
           device resources
       description: Calls POST on a device resource
-      operationId: callPostOnDeviceResource
+      operationId: postOnDeviceResource
       responses:
         "200":
           description: Successfully called POST on a device resource
           content:
-            "*/*":
+            "application/octet-stream":
               schema:
                 type: string
                 format: binary
@@ -391,7 +391,7 @@ paths:
                   $ref: "#/components/examples/ErrorWithDeviceErrorInfoExample"
       requestBody:
         content:
-          "*/*":
+          "application/octet-stream":
             schema:
               type: string
               format: binary
