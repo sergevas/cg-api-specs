@@ -9,7 +9,7 @@ info:
     Device registration gateway API. Allows a remote device to register itself
     with the gateway or update its status.
 paths:
-  "/registry/devices/status/{deviceId}":
+  "/registry/devices/{deviceId}/status":
     parameters:
       - in: path
         name: deviceId
