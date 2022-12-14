@@ -33,10 +33,10 @@ paths:
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/DeviceCurrentStateType"
+                $ref: "#/components/schemas/DeviceStateType"
               examples:
-                deviceCurrentStateTypeExample:
-                  $ref: "#/components/examples/DeviceCurrentStateTypeExample"
+                deviceStateTypeExample:
+                  $ref: "#/components/examples/DeviceStateTypeExample"
         "400":
           description: Request message validation error
           content:
@@ -68,10 +68,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DeviceCurrentStateType"
+                $ref: "#/components/schemas/DeviceStateType"
               examples:
-                deviceCurrentStateTypeExample:
-                  $ref: "#/components/examples/DeviceCurrentStateTypeExample"
+                deviceStateTypeExample:
+                  $ref: "#/components/examples/DeviceStateTypeExample"
         "500":
           description: Internal device error
           content:
@@ -85,10 +85,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeviceCurrentStateType"
+              $ref: "#/components/schemas/DeviceStateType"
             examples:
-              deviceCurrentStateTypeExample:
-                $ref: "#/components/examples/DeviceCurrentStateTypeExample"
+              deviceStateTypeExample:
+                $ref: "#/components/examples/DeviceStateTypeExample"
   "/registry/devices":
     get:
       tags:
@@ -485,10 +485,12 @@ components:
   examples:
     DeviceIdTypeExample:
       value: "0001"
+    DeviceStateTypeExample:
+      value: "ACTIVE"
     DeviceCurrentStateTypeExample:
       value:
         deviceId: "0001"
-        deviceState: "active"
+        deviceState: "ACTIVE"
     DeviceRegistrationTypeExample:
       value:
         deviceType: "switch"
