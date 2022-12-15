@@ -401,7 +401,6 @@ components:
     DeviceIdType:
       type: string
       description: Device unique identifier
-      maxLength: 4
       example: "0001"
     DeviceStateType:
       type: string
@@ -430,7 +429,6 @@ components:
           example: "switch"
         deviceId:
           type: string
-          maxLength: 4
           description: Device unique identifier
           example: "0001"
         deviceTags:
@@ -457,7 +455,7 @@ components:
         errorCode:
           description: Unique error code
           type: string
-          maxLength: 4
+          maxLength: 6
         errorMsg:
           description: Detailed error description
           type: string
@@ -468,7 +466,7 @@ components:
         errorCode:
           description: Unique error code
           type: string
-          maxLength: 4
+          maxLength: 6
         errorMsg:
           description: Detailed error description
           type: string
@@ -478,7 +476,7 @@ components:
         deviceErrorCode:
           description: Device original error code
           type: string
-          maxLength: 4
+          maxLength: 6
         deviceErrorMsg:
           description: Device original error description
           type: string

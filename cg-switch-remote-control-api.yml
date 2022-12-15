@@ -103,7 +103,6 @@ components:
     DeviceIdType:
       type: string
       description: Device unique identifier
-      maxLength: 4
       example: "0001"
     PlugType:
       type: integer
@@ -133,7 +132,6 @@ components:
           example: switch
         deviceId:
           type: string
-          maxLength: 4
           description: Device unique identifier
           example: "0001"
         deviceTags:
@@ -157,7 +155,7 @@ components:
         errorCode:
           description: Unique error code
           type: string
-          maxLength: 4
+          maxLength: 6
         errorMsg:
           description: Detailed error description
           type: string
